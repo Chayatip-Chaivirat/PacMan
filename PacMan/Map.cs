@@ -10,11 +10,14 @@ namespace PacMan
     internal class Map
     {
         private List<string> result;
+        public Tile tile;
         public static Tile[,] tileArray;
+        private Vector2 tilePos;
+        private int tileSize = 40;
 
         public Map(string fileName)
         {
-
+            CreateMap(fileName);
         }
 
         public List<string> ReadFromFile(string fileName)
@@ -36,7 +39,33 @@ namespace PacMan
             List<string> map = ReadFromFile(fileName);
             tileArray = new Tile[map[0].Length, map.Count];
 
-            // 2 for loops to fill the array
+            for (int i = 0; i < map.Count; i++)
+            {
+                for (int j = 0; j < map[0].Length; j++)
+                {
+                    if (map[i][j] == '+') // Wall
+                    {
+                        tilePos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.wall, tilePos, false);
+                    }
+                    else if (map[i][j] == '-') // Stone floor
+                    {
+                        tilePos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, tilePos, true);
+                    }
+                }
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach(Tile tile in tileArray)
+            {
+                if(tile != null)
+                {
+                    spriteBatch.Draw(tile.tileTex, tilePos, Color.White);
+                }
+            }
         }
     }
 }
