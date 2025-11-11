@@ -8,7 +8,7 @@ namespace PacMan
     {
         public bool isWalkable;
         public Texture2D tileTex;
-        private Vector2 position;
+        public Vector2 position;
         private Rectangle srcRec;
         public Tile(Texture2D tileTex, Vector2 position, bool isWalkable/*, Rectangle srcRec*/)
         {

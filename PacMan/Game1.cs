@@ -30,7 +30,8 @@ namespace PacMan
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            map = new Map("gameMap");
+            TextureManager.Textures(Content);
+            map = new Map(@"gameMap.txt");
         }
 
         protected override void Update(GameTime gameTime)
@@ -46,9 +47,11 @@ namespace PacMan
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
 
             map.Draw(_spriteBatch);
 
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

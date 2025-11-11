@@ -12,7 +12,8 @@ namespace PacMan
         private List<string> result;
         public Tile tile;
         public static Tile[,] tileArray;
-        private Vector2 tilePos;
+        private Vector2 wallTilePos;
+        private Vector2 floorTilePos;
         private int tileSize = 40;
 
         public Map(string fileName)
@@ -22,7 +23,7 @@ namespace PacMan
 
         public List<string> ReadFromFile(string fileName)
         {
-            StreamReader sr = new StreamReader(fileName);
+            using StreamReader sr = new StreamReader(fileName);
             List<string> result = new List<string>();
 
             while (!sr.EndOfStream)
@@ -45,13 +46,13 @@ namespace PacMan
                 {
                     if (map[i][j] == '+') // Wall
                     {
-                        tilePos = new Vector2(j * tileSize, i * tileSize);
-                        tileArray[j, i] = new Tile(TextureManager.wall, tilePos, false);
+                        wallTilePos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.wall, wallTilePos, false);
                     }
                     else if (map[i][j] == '-') // Stone floor
                     {
-                        tilePos = new Vector2(j * tileSize, i * tileSize);
-                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, tilePos, true);
+                        floorTilePos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, floorTilePos, true);
                     }
                 }
             }
@@ -63,7 +64,7 @@ namespace PacMan
             {
                 if(tile != null)
                 {
-                    spriteBatch.Draw(tile.tileTex, tilePos, Color.White);
+                    spriteBatch.Draw(tile.tileTex, tile.position, Color.White);
                 }
             }
         }
