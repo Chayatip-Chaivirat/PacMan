@@ -18,6 +18,8 @@ namespace PacMan
         public static Texture2D pacman_pellets;
         public static Texture2D spriteSheet_pacMan;
         public static Texture2D tileSet;
+        public static Texture2D stoneFloor;
+        public static Texture2D wall;
 
         public static void Textures(ContentManager content)
         {
@@ -33,6 +35,8 @@ namespace PacMan
             pacman_pellets = content.Load<Texture2D>("pacman_pellets");
             spriteSheet_pacMan = content.Load<Texture2D>("SpriteSheet_pacMan");
             tileSet = content.Load<Texture2D>("Tileset");
+            stoneFloor = content.Load<Texture2D>("stonefloor");
+            wall = content.Load<Texture2D>("wall");
         }
     }
 }
