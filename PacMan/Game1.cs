@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PacMan
 {
@@ -8,6 +11,7 @@ namespace PacMan
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        Map map;
 
         public Game1()
         {
@@ -26,8 +30,8 @@ namespace PacMan
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            TextureManager.Textures(Content);
+            map = new Map(@"gameMap.txt");
         }
 
         protected override void Update(GameTime gameTime)
@@ -43,9 +47,11 @@ namespace PacMan
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            map.Draw(_spriteBatch);
 
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
