@@ -17,12 +17,14 @@ namespace PacMan
         protected SpriteEffects animationFX = SpriteEffects.None;
         protected float rotation = 0;
         protected float scale = 1;
+        protected Vector2 origin;
 
         public Moveable(int totalFrame, Rectangle srcRec, Vector2 frameSize)
         {
             this.totalFrame = totalFrame;
             this.srcRec = srcRec;
             this.frameSize = frameSize;
+            origin = new Vector2((int)frameSize.X / 2, (int)frameSize.Y / 2);
         }
 
         public void Animation(GameTime gameTime)
@@ -37,7 +39,8 @@ namespace PacMan
         {
             if (tex != null)
             {
-                spriteBatch.Draw(tex, pos, srcRec, Color.White, rotation, new Vector2((int)frameSize.X/2, (int)frameSize.Y/2), scale, animationFX, 1);
+                Vector2 posOnTile = pos + origin;
+                spriteBatch.Draw(tex, posOnTile, srcRec, Color.White, rotation, origin, scale, animationFX, 1);
             }
 
         }

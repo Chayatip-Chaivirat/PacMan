@@ -57,7 +57,7 @@ namespace PacMan
                     else if (map[i][j] == 'P') // Player
                     {
                         playerStartPos = new Vector2(j * tileSize, i * tileSize);
-                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, floorTilePos, true);
+                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, playerStartPos, true);
                     }
                 }
             }
