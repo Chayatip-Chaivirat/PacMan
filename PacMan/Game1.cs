@@ -17,9 +17,9 @@ namespace PacMan
         Player player;
         Vector2 playerPos;
         Rectangle playerHitBoxLive;
-        Rectangle playerSrcRec;
-        int playerTotalFrame;
-        Vector2 playerFrameSize;
+        int playertotalFrame = 4;
+        Vector2 playerframeSize = new Vector2(40, 40);
+        Rectangle playersrcRec = new Rectangle(0, 0, 40, 40);
 
         public Game1()
         {
@@ -41,13 +41,9 @@ namespace PacMan
             TextureManager.Textures(Content);
             map = new Map(@"gameMap.txt");
 
-            // Player
-            playerPos = new Vector2(150,200);
-            playerHitBoxLive = new Rectangle(0,0,40,40);
-            playerSrcRec = new Rectangle(0,0,40,40);
-            playerTotalFrame = 4;
-            playerFrameSize = new Vector2(40,40);
-            player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playerTotalFrame, playerSrcRec, playerFrameSize);
+            //Player
+            playerPos = map.playerStartPos;
+            player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playertotalFrame, playersrcRec, playerframeSize);
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,7 +62,7 @@ namespace PacMan
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-            //map.Draw(_spriteBatch);
+            map.Draw(_spriteBatch);
             player.Draw(_spriteBatch);
 
             _spriteBatch.End();

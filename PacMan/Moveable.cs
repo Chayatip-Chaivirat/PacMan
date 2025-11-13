@@ -13,6 +13,7 @@ namespace PacMan
         protected Vector2 frameSize;
         protected double frameTimer = 100, frameInterval = 100;
         protected Rectangle srcRec;
+
         protected SpriteEffects animationFX = SpriteEffects.None;
         protected float rotation = 0;
         protected float scale = 1;
@@ -30,10 +31,8 @@ namespace PacMan
             if (frameTimer <= 0)
             {
                 frameTimer = frameInterval; frame++;
-                srcRec.X = (frame % totalFrame) * (int)frameSize.X;
-            }
+                srcRec.X = (frame % totalFrame) * (int)frameSize.X;            }
         }
-
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (tex != null)

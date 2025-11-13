@@ -15,7 +15,7 @@ namespace PacMan
         private Vector2 wallTilePos;
         private Vector2 floorTilePos;
         private int tileSize = 40;
-
+        public Vector2 playerStartPos { get; set; }
         public Map(string fileName)
         {
             CreateMap(fileName);
@@ -52,6 +52,11 @@ namespace PacMan
                     else if (map[i][j] == '-') // Stone floor
                     {
                         floorTilePos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, floorTilePos, true);
+                    }
+                    else if (map[i][j] == 'P') // Player
+                    {
+                        playerStartPos = new Vector2(j * tileSize, i * tileSize);
                         tileArray[j, i] = new Tile(TextureManager.stoneFloor, floorTilePos, true);
                     }
                 }

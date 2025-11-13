@@ -9,13 +9,15 @@ namespace PacMan
 {
     internal class Player : Moveable
     {
-        public Player(Texture2D tex, Vector2 pos, Rectangle hitBoxLive, int totalFrame, Rectangle srcRec, Vector2 frameSize) : base(totalFrame, srcRec, frameSize)
+        public Player(Texture2D tex, Vector2 pos, Rectangle hitBoxLive, int TotalFrame, Rectangle srcRec, Vector2 FrameSize) : base(TotalFrame, srcRec, FrameSize)
         {
             this.tex = tex;
             this.pos = pos;
             this.hitBoxLive = hitBoxLive;
+            //totalFrame = 4;
+            //frameSize = new Vector2(40, 40);
+            //srcRec = new Rectangle(0, 0, 40, 40);
         }
-
         public void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
