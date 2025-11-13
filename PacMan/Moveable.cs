@@ -16,7 +16,7 @@ namespace PacMan
 
         protected SpriteEffects animationFX = SpriteEffects.None;
         protected float rotation = 0;
-        protected float scale = 1;
+        protected float scale;
         protected Vector2 origin;
 
         public Moveable(int totalFrame, Rectangle srcRec, Vector2 frameSize)

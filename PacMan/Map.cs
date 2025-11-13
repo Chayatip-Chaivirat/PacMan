@@ -16,6 +16,8 @@ namespace PacMan
         private Vector2 floorTilePos;
         private int tileSize = 40;
         public Vector2 playerStartPos { get; set; }
+        public Vector2 enemyStartPos { get; set; }
+        public Vector2 foodStartPos { get; set; }
         public Map(string fileName)
         {
             CreateMap(fileName);
@@ -58,6 +60,16 @@ namespace PacMan
                     {
                         playerStartPos = new Vector2(j * tileSize, i * tileSize);
                         tileArray[j, i] = new Tile(TextureManager.stoneFloor, playerStartPos, true);
+                    }
+                    else if (map[i][j] == 'E') // Enemy
+                    {
+                        enemyStartPos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, enemyStartPos, true);
+                    }
+                    else if (map[i][j] == 'F') // Food
+                    {
+                        foodStartPos = new Vector2(j * tileSize, i * tileSize);
+                        tileArray[j, i] = new Tile(TextureManager.stoneFloor, foodStartPos, true);
                     }
                 }
             }

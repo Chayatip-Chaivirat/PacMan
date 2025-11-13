@@ -21,6 +21,13 @@ namespace PacMan
         Vector2 playerframeSize = new Vector2(40, 40);
         Rectangle playersrcRec = new Rectangle(0, 0, 40, 40);
 
+        //Enemy
+        Enemy enemy;
+        Vector2 enemyPos;
+
+        //Food
+        Food food;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -44,6 +51,12 @@ namespace PacMan
             //Player
             playerPos = map.playerStartPos;
             player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playertotalFrame, playersrcRec, playerframeSize);
+
+            //Enemy
+            enemy = new Enemy(TextureManager.spriteSheet_pacMan, map.enemyStartPos,playerHitBoxLive, 6, playersrcRec,playerframeSize);
+
+            //Food
+            food = new Food(TextureManager.pac_man_fruits, map.foodStartPos, playerHitBoxLive);
         }
 
         protected override void Update(GameTime gameTime)
@@ -53,6 +66,8 @@ namespace PacMan
 
             player.Animation(gameTime);
             player.Update(gameTime);
+
+            enemy.Animation(gameTime);
 
             base.Update(gameTime);
         }
@@ -64,7 +79,8 @@ namespace PacMan
 
             map.Draw(_spriteBatch);
             player.Draw(_spriteBatch);
-
+            enemy.Draw(_spriteBatch);
+            food.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

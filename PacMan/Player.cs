@@ -14,9 +14,7 @@ namespace PacMan
             this.tex = tex;
             this.pos = pos;
             this.hitBoxLive = hitBoxLive;
-            //totalFrame = 4;
-            //frameSize = new Vector2(40, 40);
-            //srcRec = new Rectangle(0, 0, 40, 40);
+            scale = 1;
         }
         public void Update(GameTime gameTime)
         {
