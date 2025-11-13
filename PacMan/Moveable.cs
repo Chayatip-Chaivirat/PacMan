@@ -1,13 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Timers;
-using SharpDX.Direct3D11;
-using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 namespace PacMan
 {
     internal class Moveable : CollidableObject
@@ -37,42 +33,12 @@ namespace PacMan
                 srcRec.X = (frame % totalFrame) * (int)frameSize.X;
             }
         }
-        public void AnimationSpriteEffect(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                animationFX = SpriteEffects.None;
-                rotation = 0;
-                frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-                rotation = MathHelper.ToRadians(0);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                animationFX = SpriteEffects.FlipHorizontally;
-                rotation = 0;
-                frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-                rotation = MathHelper.ToRadians(0);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
-            {
-                rotation = MathHelper.ToRadians(-90);
-                frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                rotation = MathHelper.ToRadians(-90);
-                frameTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-            }
-        }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (tex != null)
             {
-                spriteBatch.Draw(tex, pos, srcRec, Color.White, rotation, new Vector2(), scale, animationFX, 1);
+                spriteBatch.Draw(tex, pos, srcRec, Color.White, rotation, new Vector2((int)frameSize.X/2, (int)frameSize.Y/2), scale, animationFX, 1);
             }
 
         }

@@ -13,6 +13,14 @@ namespace PacMan
         private SpriteBatch _spriteBatch;
         Map map;
 
+        // Player
+        Player player;
+        Vector2 playerPos;
+        Rectangle playerHitBoxLive;
+        Rectangle playerSrcRec;
+        int playerTotalFrame;
+        Vector2 playerFrameSize;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -32,6 +40,14 @@ namespace PacMan
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             TextureManager.Textures(Content);
             map = new Map(@"gameMap.txt");
+
+            // Player
+            playerPos = new Vector2(150,200);
+            playerHitBoxLive = new Rectangle(0,0,40,40);
+            playerSrcRec = new Rectangle(0,0,40,40);
+            playerTotalFrame = 4;
+            playerFrameSize = new Vector2(40,40);
+            player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playerTotalFrame, playerSrcRec, playerFrameSize);
         }
 
         protected override void Update(GameTime gameTime)
@@ -39,7 +55,8 @@ namespace PacMan
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            player.Animation(gameTime);
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -49,7 +66,8 @@ namespace PacMan
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-            map.Draw(_spriteBatch);
+            //map.Draw(_spriteBatch);
+            player.Draw(_spriteBatch);
 
             _spriteBatch.End();
             base.Draw(gameTime);
