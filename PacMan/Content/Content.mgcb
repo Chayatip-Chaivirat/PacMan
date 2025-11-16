@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin animationFX.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:animationFX.fx
+
 #begin ghost.png
 /importer:TextureImporter
 /processor:TextureProcessor
