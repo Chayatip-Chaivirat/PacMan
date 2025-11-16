@@ -17,7 +17,9 @@ namespace PacMan
         private int tileSize = 40;
         public Vector2 playerStartPos { get; set; }
         public Vector2 enemyStartPos { get; set; }
+        public List<Vector2> enemyPositions { get; private set; } = new List<Vector2>();
         public Vector2 foodStartPos { get; set; }
+        public List<Vector2> foodPositions { get; private set; } = new List<Vector2>();
         public Map(string fileName)
         {
             CreateMap(fileName);
@@ -64,11 +66,13 @@ namespace PacMan
                     else if (map[i][j] == 'E') // Enemy
                     {
                         enemyStartPos = new Vector2(j * tileSize, i * tileSize);
+                        enemyPositions.Add(enemyStartPos);
                         tileArray[j, i] = new Tile(TextureManager.stoneFloor, enemyStartPos, true);
                     }
                     else if (map[i][j] == 'F') // Food
                     {
                         foodStartPos = new Vector2(j * tileSize, i * tileSize);
+                        foodPositions.Add(foodStartPos);
                         tileArray[j, i] = new Tile(TextureManager.stoneFloor, foodStartPos, true);
                     }
                 }

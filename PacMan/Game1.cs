@@ -12,6 +12,8 @@ namespace PacMan
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         Map map;
+        private List<Enemy> enemyList = new List<Enemy>();
+        private List<Food> foodList = new List<Food>();
 
         // Player
         Player player;
@@ -53,10 +55,16 @@ namespace PacMan
             player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playertotalFrame, playersrcRec, playerframeSize);
 
             //Enemy
-            enemy = new Enemy(TextureManager.spriteSheet_pacMan, map.enemyStartPos,playerHitBoxLive, 6, playersrcRec,playerframeSize);
+            foreach(Vector2 enemyStartPos in map.enemyPositions)
+            {
+                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, playerHitBoxLive, 6, playersrcRec, playerframeSize));
+            }
 
             //Food
-            food = new Food(TextureManager.pac_man_fruits, map.foodStartPos, playerHitBoxLive);
+            foreach(Vector2 foodStartPos in map.foodPositions)
+            {
+                foodList.Add(new Food(TextureManager.pac_man_fruits, foodStartPos, playerHitBoxLive));
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -67,7 +75,10 @@ namespace PacMan
             player.Animation(gameTime);
             player.Update(gameTime);
 
-            enemy.Animation(gameTime);
+            foreach (Enemy ene in enemyList)
+            {
+                ene.Animation(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -79,8 +90,16 @@ namespace PacMan
 
             map.Draw(_spriteBatch);
             player.Draw(_spriteBatch);
-            enemy.Draw(_spriteBatch);
-            food.Draw(_spriteBatch);
+
+            foreach(Enemy ene in enemyList)
+            {
+                ene.Draw(_spriteBatch);
+            }
+
+            foreach(Food f in foodList)
+            {
+                f.Draw(_spriteBatch);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
