@@ -10,6 +10,7 @@ namespace PacMan
 {
     internal class Player : Moveable
     {
+        protected int Lives = 10;
         public Player(Texture2D tex, Vector2 pos, Rectangle hitBoxLive, int TotalFrame, Rectangle srcRec, Vector2 FrameSize) : base(TotalFrame, srcRec, FrameSize)
         {
             this.tex = tex;

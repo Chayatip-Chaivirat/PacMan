@@ -12,5 +12,11 @@ namespace PacMan
         protected Texture2D tex;
         protected Vector2 pos;
         protected Rectangle hitBoxLive;
+
+        // Detect intersection
+        public bool Collisiondetection(CollidableObject otherClass)
+        {
+            return this.hitBoxLive.Intersects(otherClass.hitBoxLive);
+        }
     }
 }
