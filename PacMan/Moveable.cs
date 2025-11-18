@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,11 @@ namespace PacMan
         protected float scale;
         protected Vector2 origin;
 
+        protected Vector2 objectDirection;
+        protected float speed;
+        protected bool objectMoving;
+        protected Vector2 objectDestination;
+
         public Moveable(int totalFrame, Rectangle srcRec, Vector2 frameSize)
         {
             this.totalFrame = totalFrame;
@@ -34,6 +40,30 @@ namespace PacMan
             {
                 frameTimer = frameInterval; frame++;
                 srcRec.X = (frame % totalFrame) * (int)frameSize.X;            }
+        }
+
+        public void ChangeDirection(Vector2 direction)
+        {
+            objectDirection = direction;
+            Vector2 newObjectDestination = pos + objectDirection * Map.tileSize;
+
+            if (Map.GetTileAtPosition(newObjectDestination)) // If the tile is walkable
+            {
+                objectDestination = newObjectDestination;
+                objectMoving = true;
+            }
+        }
+
+        public void MoveToTile(GameTime gameTime)
+        {
+            float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            pos += objectDirection * speed * dt;
+
+            if (Vector2.Distance(pos, objectDestination) < 1f)
+            {
+                pos = objectDestination;
+                objectMoving = false;
+            }
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
