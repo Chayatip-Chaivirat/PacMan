@@ -14,7 +14,7 @@ namespace PacMan
         public static Tile[,] tileArray;
         private Vector2 wallTilePos;
         private Vector2 floorTilePos;
-        private int tileSize = 40;
+        public static int tileSize = 40;
         public Vector2 playerStartPos { get; set; }
         public Vector2 enemyStartPos { get; set; }
         public List<Vector2> enemyPositions { get; private set; } = new List<Vector2>();
@@ -77,6 +77,18 @@ namespace PacMan
                     }
                 }
             }
+        }
+
+        public static bool GetTileAtPosition(Vector2 position)
+        {
+            int tileX = (int)position.X / tileSize;
+            int tileY = (int)position.Y / tileSize;
+
+            // Prevent out of bounds
+            if (tileX < 0 || tileY < 0 || tileX >= tileArray.GetLength(0) || tileY >= tileArray.GetLength(1))
+                return false;
+
+            return tileArray[tileX, tileY].isWalkable;
         }
 
         public void Draw(SpriteBatch spriteBatch)
