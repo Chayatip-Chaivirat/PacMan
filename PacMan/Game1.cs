@@ -26,13 +26,22 @@ namespace PacMan
         //Enemy
         Enemy enemy;
         Vector2 enemyPos;
-        //Rectangle enemyRecLeftRight = new Rectangle(0, 0, 40, 40);
-        //Rectangle enemyRecUp = new Rectangle(158, 0, 40, 40);
-        //Rectangle enemyRecDown = new Rectangle(237, 0, 40, 40);
+        Rectangle enemyHitBoxLive;
 
         //Food
         Food food;
 
+        //SpriteFont
+        SpriteFont font;
+
+        //GameState
+        static GameState gameState;
+        enum GameState
+        {
+            Starting,
+            Playing,
+            GameOver
+        }
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -52,15 +61,18 @@ namespace PacMan
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             TextureManager.Textures(Content);
             map = new Map(@"gameMap.txt");
+            font = Content.Load<SpriteFont>("Font");
 
             //Player
             playerPos = map.playerStartPos;
+            playerHitBoxLive= new Rectangle((int)playerPos.X, (int)playerPos.Y, 45, 45);
             player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playertotalFrame, playersrcRec, playerframeSize);
 
             //Enemy
             foreach(Vector2 enemyStartPos in map.enemyPositions)
             {
-                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, playerHitBoxLive, 2, playersrcRec, playerframeSize));
+                enemyHitBoxLive = new Rectangle((int)playerPos.X, (int)playerPos.Y, 45, 45);
+                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, enemyHitBoxLive, 2, playersrcRec, playerframeSize));
             }
 
             //Food
@@ -75,13 +87,35 @@ namespace PacMan
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            player.Animation(gameTime);
-            player.Update(gameTime);
-
-            foreach (Enemy ene in enemyList)
+            if (gameState == GameState.Starting)
             {
-                ene.Animation(gameTime);
-                ene.Movement(gameTime);
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    gameState = GameState.Playing;
+                }
+            }
+
+            if (gameState == GameState.Playing)
+            {
+
+                player.Animation(gameTime);
+                player.Update(gameTime, enemyList);
+
+                foreach (Enemy ene in enemyList)
+                {
+                    ene.Animation(gameTime);
+                    ene.Movement(gameTime);
+                }
+
+                if (player.lives == 0)
+                {
+                    gameState = GameState.GameOver;
+                }
+            }
+
+            if (gameState == GameState.GameOver)
+            {
+
             }
 
             base.Update(gameTime);
@@ -92,18 +126,35 @@ namespace PacMan
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-            map.Draw(_spriteBatch);
-            player.Draw(_spriteBatch);
-
-            foreach(Enemy ene in enemyList)
+            if (gameState == GameState.Starting)
             {
-                ene.Draw(_spriteBatch);
+                _spriteBatch.DrawString(font, "Click Enter to start", new Vector2(), Color.Black);
             }
 
-            foreach(Food f in foodList)
+            if (gameState == GameState.Playing)
             {
-                f.Draw(_spriteBatch);
+                map.Draw(_spriteBatch);
+                player.Draw(_spriteBatch);
+
+                foreach (Enemy ene in enemyList)
+                {
+                    ene.Draw(_spriteBatch);
+                }
+
+                foreach (Food f in foodList)
+                {
+                    f.Draw(_spriteBatch);
+                }
             }
+
+            if (gameState == GameState.GameOver)
+            {
+                _spriteBatch.DrawString(font, "Game Over", new Vector2(), Color.Black);
+            }
+
+            //SpriteFont
+            Window.Title = "Pac Man Lives: " + player.lives;
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
