@@ -26,6 +26,9 @@ namespace PacMan
         //Enemy
         Enemy enemy;
         Vector2 enemyPos;
+        //Rectangle enemyRecLeftRight = new Rectangle(0, 0, 40, 40);
+        //Rectangle enemyRecUp = new Rectangle(158, 0, 40, 40);
+        //Rectangle enemyRecDown = new Rectangle(237, 0, 40, 40);
 
         //Food
         Food food;
@@ -57,7 +60,7 @@ namespace PacMan
             //Enemy
             foreach(Vector2 enemyStartPos in map.enemyPositions)
             {
-                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, playerHitBoxLive, 6, playersrcRec, playerframeSize));
+                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, playerHitBoxLive, 2, playersrcRec, playerframeSize));
             }
 
             //Food
@@ -78,6 +81,7 @@ namespace PacMan
             foreach (Enemy ene in enemyList)
             {
                 ene.Animation(gameTime);
+                ene.Movement(gameTime);
             }
 
             base.Update(gameTime);
