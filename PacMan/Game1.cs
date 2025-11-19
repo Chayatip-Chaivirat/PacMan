@@ -72,14 +72,14 @@ namespace PacMan
             //Enemy
             foreach(Vector2 enemyStartPos in map.enemyPositions)
             {
-                enemyHitBoxLive = new Rectangle((int)enemyStartPos.X, (int)enemyStartPos.Y, 45, 40);
+                enemyHitBoxLive = new Rectangle((int)enemyStartPos.X, (int)enemyStartPos.Y, 40, 40);
                 enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, enemyHitBoxLive, 2, playersrcRec, playerframeSize));
             }
 
             //Food
             foreach(Vector2 foodStartPos in map.foodPositions)
             {
-                foodHitBox = new Rectangle((int)foodStartPos.X, (int)foodStartPos.Y, 45, 40);
+                foodHitBox = new Rectangle((int)foodStartPos.X, (int)foodStartPos.Y, 40, 40);
                 foodList.Add(new Food(TextureManager.pac_man_fruits, foodStartPos, foodHitBox));
             }
         }

@@ -51,8 +51,6 @@ namespace PacMan
             if (Map.GetTileAtPosition(newObjectDestination)) // If the tile is walkable
             {
                 objectDestination = newObjectDestination;
-                hitBoxLive.X = (int)pos.X;
-                hitBoxLive.Y = (int)pos.Y;
                 objectMoving = true;
             }
         }
@@ -61,6 +59,8 @@ namespace PacMan
         {
             float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
             pos += objectDirection * speed * dt;
+            hitBoxLive.X = (int)pos.X;
+            hitBoxLive.Y = (int)pos.Y;
 
             if (Vector2.Distance(pos, objectDestination) < 1f)
             {
