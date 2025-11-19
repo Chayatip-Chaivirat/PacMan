@@ -26,13 +26,24 @@ namespace PacMan
         //Enemy
         Enemy enemy;
         Vector2 enemyPos;
-        //Rectangle enemyRecLeftRight = new Rectangle(0, 0, 40, 40);
-        //Rectangle enemyRecUp = new Rectangle(158, 0, 40, 40);
-        //Rectangle enemyRecDown = new Rectangle(237, 0, 40, 40);
+        Rectangle enemyHitBoxLive;
 
         //Food
         Food food;
+        Rectangle foodHitBox;
 
+        //SpriteFont
+        SpriteFont font;
+
+        //GameState
+        static GameState gameState;
+        enum GameState
+        {
+            Starting,
+            Playing,
+            GameOver,
+            Victory
+        }
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -52,21 +63,25 @@ namespace PacMan
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             TextureManager.Textures(Content);
             map = new Map(@"gameMap.txt");
+            font = Content.Load<SpriteFont>("Font");
 
             //Player
             playerPos = map.playerStartPos;
+            playerHitBoxLive= new Rectangle((int)playerPos.X, (int)playerPos.Y, 40, 40);
             player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playertotalFrame, playersrcRec, playerframeSize);
 
             //Enemy
             foreach(Vector2 enemyStartPos in map.enemyPositions)
             {
-                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, playerHitBoxLive, 2, playersrcRec, playerframeSize));
+                enemyHitBoxLive = new Rectangle((int)enemyStartPos.X, (int)enemyStartPos.Y, 35, 35);
+                enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, enemyHitBoxLive, 2, playersrcRec, playerframeSize));
             }
 
             //Food
             foreach(Vector2 foodStartPos in map.foodPositions)
             {
-                foodList.Add(new Food(TextureManager.pac_man_fruits, foodStartPos, playerHitBoxLive));
+                foodHitBox = new Rectangle((int)foodStartPos.X, (int)foodStartPos.Y, 40, 40);
+                foodList.Add(new Food(TextureManager.pac_man_fruits, foodStartPos, foodHitBox));
             }
         }
 
@@ -75,13 +90,34 @@ namespace PacMan
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            player.Animation(gameTime);
-            player.Update(gameTime);
-
-            foreach (Enemy ene in enemyList)
+            if (gameState == GameState.Starting)
             {
-                ene.Animation(gameTime);
-                ene.Movement(gameTime);
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) || Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    gameState = GameState.Playing;
+                }
+            }
+
+            if (gameState == GameState.Playing)
+            {
+
+                player.Animation(gameTime);
+                player.Update(gameTime, enemyList, foodList);
+
+                foreach (Enemy ene in enemyList)
+                {
+                    ene.Animation(gameTime);
+                    ene.Movement(gameTime);
+                }
+
+                if (player.lives == 0)
+                {
+                    gameState = GameState.GameOver;
+                }
+                if (foodList.Count == 0)
+                {
+                    gameState = GameState.Victory;
+                }
             }
 
             base.Update(gameTime);
@@ -92,18 +128,42 @@ namespace PacMan
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-            map.Draw(_spriteBatch);
-            player.Draw(_spriteBatch);
+            Vector2 fontPos = new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
 
-            foreach(Enemy ene in enemyList)
+            if (gameState == GameState.Starting)
             {
-                ene.Draw(_spriteBatch);
+                _spriteBatch.DrawString(font, "Click Enter or Space to start", fontPos, Color.Black);
             }
 
-            foreach(Food f in foodList)
+            if (gameState == GameState.Playing)
             {
-                f.Draw(_spriteBatch);
+                map.Draw(_spriteBatch);
+                player.Draw(_spriteBatch);
+
+                foreach (Enemy ene in enemyList)
+                {
+                    ene.Draw(_spriteBatch);
+                }
+
+                foreach (Food f in foodList)
+                {
+                    f.Draw(_spriteBatch);
+                }
             }
+
+            if (gameState == GameState.GameOver)
+            {
+                _spriteBatch.DrawString(font, "You Lose. LOCK IN.", fontPos, Color.Black);
+            }
+
+            if (gameState == GameState.Victory)
+            {
+                _spriteBatch.DrawString(font, "Congrats; you won!", fontPos, Color.Black);
+            }
+
+            //SpriteFont
+            Window.Title = "Pac Man Lives: " + player.lives;
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }

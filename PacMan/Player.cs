@@ -10,6 +10,9 @@ namespace PacMan
 {
     internal class Player : Moveable
     {
+        public int lives = 3;
+        private float collisionInterval = 1.0f;
+        private float currentCD = 0.5f;
         public Player(Texture2D tex, Vector2 pos, Rectangle hitBoxLive, int TotalFrame, Rectangle srcRec, Vector2 FrameSize) : base(TotalFrame, srcRec, FrameSize)
         {
             this.tex = tex;
@@ -20,8 +23,9 @@ namespace PacMan
             objectMoving = false;
             objectDestination = Vector2.Zero;
         }
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, List<Enemy> enemyList, List<Food> foodList)
         {
+            // ==== Movements ====
             if(!objectMoving)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
@@ -61,6 +65,43 @@ namespace PacMan
             else
             {
                 MoveToTile(gameTime);
+            }
+
+            // ==== Collisions ====
+            float deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (currentCD > 0)
+            {
+                currentCD -= deltaTime;
+            }
+
+            CollisionWithEnemy(enemyList);
+            CollisionWithFood(foodList);
+        }
+
+        public void CollisionWithEnemy(List<Enemy> enemyList)
+        {
+            foreach (Enemy ene in enemyList)
+            {
+                if(Collisiondetection(ene))
+                {
+                    if(currentCD <= 0f)
+                    {
+                        lives -= 1;
+                        currentCD = collisionInterval; // Reset cooldown when collide
+                    }
+                }
+            }
+        }
+
+        public void CollisionWithFood(List<Food> foodList)
+        {
+            for (int i = foodList.Count -1; i >= 0; i--)
+            {
+                if (Collisiondetection(foodList[i]))
+                {
+                    foodList.RemoveAt(i);
+                }
             }
         }
     }

@@ -39,7 +39,8 @@ namespace PacMan
             if (frameTimer <= 0)
             {
                 frameTimer = frameInterval; frame++;
-                srcRec.X = (frame % totalFrame) * (int)frameSize.X;            }
+                srcRec.X = (frame % totalFrame) * (int)frameSize.X;  
+            }
         }
 
         public void ChangeDirection(Vector2 direction)
@@ -58,6 +59,8 @@ namespace PacMan
         {
             float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
             pos += objectDirection * speed * dt;
+            hitBoxLive.X = (int)pos.X;
+            hitBoxLive.Y = (int)pos.Y;
 
             if (Vector2.Distance(pos, objectDestination) < 1f)
             {
