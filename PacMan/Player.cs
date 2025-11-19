@@ -23,7 +23,7 @@ namespace PacMan
             objectMoving = false;
             objectDestination = Vector2.Zero;
         }
-        public void Update(GameTime gameTime, List<Enemy> enemyList)
+        public void Update(GameTime gameTime, List<Enemy> enemyList, List<Food> foodList)
         {
             // ==== Movements ====
             if(!objectMoving)
@@ -76,6 +76,7 @@ namespace PacMan
             }
 
             CollisionWithEnemy(enemyList);
+            CollisionWithFood(foodList);
         }
 
         public void CollisionWithEnemy(List<Enemy> enemyList)
@@ -89,6 +90,17 @@ namespace PacMan
                         lives -= 1;
                         currentCD = collisionInterval; // Reset cooldown when collide
                     }
+                }
+            }
+        }
+
+        public void CollisionWithFood(List<Food> foodList)
+        {
+            for (int i = foodList.Count -1; i >= 0; i--)
+            {
+                if (Collisiondetection(foodList[i]))
+                {
+                    foodList.RemoveAt(i);
                 }
             }
         }

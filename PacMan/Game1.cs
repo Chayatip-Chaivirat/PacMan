@@ -30,6 +30,7 @@ namespace PacMan
 
         //Food
         Food food;
+        Rectangle foodHitBox;
 
         //SpriteFont
         SpriteFont font;
@@ -65,20 +66,21 @@ namespace PacMan
 
             //Player
             playerPos = map.playerStartPos;
-            playerHitBoxLive= new Rectangle((int)playerPos.X, (int)playerPos.Y, 45, 45);
+            playerHitBoxLive= new Rectangle((int)playerPos.X, (int)playerPos.Y, 40, 40);
             player = new Player(TextureManager.pacman, playerPos, playerHitBoxLive, playertotalFrame, playersrcRec, playerframeSize);
 
             //Enemy
             foreach(Vector2 enemyStartPos in map.enemyPositions)
             {
-                enemyHitBoxLive = new Rectangle((int)playerPos.X, (int)playerPos.Y, 45, 45);
+                enemyHitBoxLive = new Rectangle((int)enemyStartPos.X, (int)enemyStartPos.Y, 45, 40);
                 enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, enemyHitBoxLive, 2, playersrcRec, playerframeSize));
             }
 
             //Food
             foreach(Vector2 foodStartPos in map.foodPositions)
             {
-                foodList.Add(new Food(TextureManager.pac_man_fruits, foodStartPos, playerHitBoxLive));
+                foodHitBox = new Rectangle((int)foodStartPos.X, (int)foodStartPos.Y, 45, 40);
+                foodList.Add(new Food(TextureManager.pac_man_fruits, foodStartPos, foodHitBox));
             }
         }
 
@@ -99,7 +101,7 @@ namespace PacMan
             {
 
                 player.Animation(gameTime);
-                player.Update(gameTime, enemyList);
+                player.Update(gameTime, enemyList, foodList);
 
                 foreach (Enemy ene in enemyList)
                 {
@@ -107,7 +109,7 @@ namespace PacMan
                     ene.Movement(gameTime);
                 }
 
-                if (player.lives == 0)
+                if (player.lives == 0 || foodList.Count == 0)
                 {
                     gameState = GameState.GameOver;
                 }
