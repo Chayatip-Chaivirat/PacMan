@@ -41,7 +41,8 @@ namespace PacMan
         {
             Starting,
             Playing,
-            GameOver
+            GameOver,
+            Victory
         }
         public Game1()
         {
@@ -72,7 +73,7 @@ namespace PacMan
             //Enemy
             foreach(Vector2 enemyStartPos in map.enemyPositions)
             {
-                enemyHitBoxLive = new Rectangle((int)enemyStartPos.X, (int)enemyStartPos.Y, 40, 40);
+                enemyHitBoxLive = new Rectangle((int)enemyStartPos.X, (int)enemyStartPos.Y, 35, 35);
                 enemyList.Add(new Enemy(TextureManager.spriteSheet_pacMan, enemyStartPos, enemyHitBoxLive, 2, playersrcRec, playerframeSize));
             }
 
@@ -91,7 +92,7 @@ namespace PacMan
 
             if (gameState == GameState.Starting)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) || Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     gameState = GameState.Playing;
                 }
@@ -109,15 +110,14 @@ namespace PacMan
                     ene.Movement(gameTime);
                 }
 
-                if (player.lives == 0 || foodList.Count == 0)
+                if (player.lives == 0)
                 {
                     gameState = GameState.GameOver;
                 }
-            }
-
-            if (gameState == GameState.GameOver)
-            {
-
+                if (foodList.Count == 0)
+                {
+                    gameState = GameState.Victory;
+                }
             }
 
             base.Update(gameTime);
@@ -128,9 +128,11 @@ namespace PacMan
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
+            Vector2 fontPos = new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
+
             if (gameState == GameState.Starting)
             {
-                _spriteBatch.DrawString(font, "Click Enter to start", new Vector2(), Color.Black);
+                _spriteBatch.DrawString(font, "Click Enter or Space to start", fontPos, Color.Black);
             }
 
             if (gameState == GameState.Playing)
@@ -151,7 +153,12 @@ namespace PacMan
 
             if (gameState == GameState.GameOver)
             {
-                _spriteBatch.DrawString(font, "Game Over", new Vector2(), Color.Black);
+                _spriteBatch.DrawString(font, "You Lose. LOCK IN.", fontPos, Color.Black);
+            }
+
+            if (gameState == GameState.Victory)
+            {
+                _spriteBatch.DrawString(font, "Congrats; you won!", fontPos, Color.Black);
             }
 
             //SpriteFont

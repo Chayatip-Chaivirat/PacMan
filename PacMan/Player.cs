@@ -11,8 +11,8 @@ namespace PacMan
     internal class Player : Moveable
     {
         public int lives = 3;
-        private float collisionInterval = 1.5f;
-        private float currentCD = 1.0f;
+        private float collisionInterval = 1.0f;
+        private float currentCD = 0.5f;
         public Player(Texture2D tex, Vector2 pos, Rectangle hitBoxLive, int TotalFrame, Rectangle srcRec, Vector2 FrameSize) : base(TotalFrame, srcRec, FrameSize)
         {
             this.tex = tex;
